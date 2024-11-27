@@ -1,6 +1,6 @@
--- CREATE TYPE "public"."completion_status" AS ENUM('not_started', 'in_progress', 'completed');--> statement-breakpoint
--- CREATE TYPE "public"."learning_path_level" AS ENUM('beginner', 'intermediate', 'advanced');--> statement-breakpoint
--- CREATE TYPE "public"."quiz_attempt_status" AS ENUM('started', 'completed', 'failed');--> statement-breakpoint
+CREATE TYPE "public"."completion_status" AS ENUM('not_started', 'in_progress', 'completed');--> statement-breakpoint
+CREATE TYPE "public"."learning_path_level" AS ENUM('beginner', 'intermediate', 'advanced');--> statement-breakpoint
+CREATE TYPE "public"."quiz_attempt_status" AS ENUM('started', 'completed', 'failed');--> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "answer_options" (
 	"id" serial PRIMARY KEY NOT NULL,
 	"question_id" integer NOT NULL,
@@ -14,27 +14,29 @@ CREATE TABLE IF NOT EXISTS "badges" (
 	"description" text,
 	"image_url" text,
 	"learning_path_id" integer,
-	"created_at" timestamp with time zone DEFAULT CURRENT_TIMESTAMP,
-	"updated_at" timestamp with time zone DEFAULT CURRENT_TIMESTAMP
+	"created_at" timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+	"updated_at" timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "courses" (
 	"id" serial PRIMARY KEY NOT NULL,
 	"name" text NOT NULL,
 	"learning_path_id" integer NOT NULL,
-	"total_lessons" integer DEFAULT 0,
+	"total_modules" integer DEFAULT 0,
 	"description" text,
-	"created_at" timestamp with time zone DEFAULT CURRENT_TIMESTAMP,
-	"updated_at" timestamp with time zone DEFAULT CURRENT_TIMESTAMP
+	"order_index" integer NOT NULL,
+	"created_at" timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+	"updated_at" timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "learning_paths" (
 	"id" serial PRIMARY KEY NOT NULL,
 	"name" text NOT NULL,
 	"level" "learning_path_level" NOT NULL,
-	"description" text,
-	"created_at" timestamp with time zone DEFAULT CURRENT_TIMESTAMP,
-	"updated_at" timestamp with time zone DEFAULT CURRENT_TIMESTAMP
+	"description" text NOT NULL,
+	"estimated_duration" integer,
+	"created_at" timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+	"updated_at" timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "modules" (
@@ -42,9 +44,9 @@ CREATE TABLE IF NOT EXISTS "modules" (
 	"course_id" integer NOT NULL,
 	"name" text NOT NULL,
 	"description" text,
-	"order_index" integer,
-	"created_at" timestamp with time zone DEFAULT CURRENT_TIMESTAMP,
-	"updated_at" timestamp with time zone DEFAULT CURRENT_TIMESTAMP
+	"order_index" integer NOT NULL,
+	"created_at" timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+	"updated_at" timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "questions" (
@@ -52,8 +54,8 @@ CREATE TABLE IF NOT EXISTS "questions" (
 	"quiz_id" integer NOT NULL,
 	"text" text NOT NULL,
 	"point_value" integer NOT NULL,
-	"created_at" timestamp with time zone DEFAULT CURRENT_TIMESTAMP,
-	"updated_at" timestamp with time zone DEFAULT CURRENT_TIMESTAMP
+	"created_at" timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+	"updated_at" timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "quiz_attempt_details" (
@@ -62,8 +64,8 @@ CREATE TABLE IF NOT EXISTS "quiz_attempt_details" (
 	"question_id" integer NOT NULL,
 	"selected_answer_id" integer,
 	"is_correct" boolean,
-	"created_at" timestamp with time zone DEFAULT CURRENT_TIMESTAMP,
-	"updated_at" timestamp with time zone DEFAULT CURRENT_TIMESTAMP
+	"created_at" timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+	"updated_at" timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "quiz_attempts" (
@@ -74,8 +76,8 @@ CREATE TABLE IF NOT EXISTS "quiz_attempts" (
 	"start_time" timestamp with time zone,
 	"end_time" timestamp with time zone,
 	"status" "quiz_attempt_status" DEFAULT 'started',
-	"created_at" timestamp with time zone DEFAULT CURRENT_TIMESTAMP,
-	"updated_at" timestamp with time zone DEFAULT CURRENT_TIMESTAMP
+	"created_at" timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+	"updated_at" timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "quizzes" (
@@ -85,8 +87,9 @@ CREATE TABLE IF NOT EXISTS "quizzes" (
 	"description" text,
 	"total_questions" integer NOT NULL,
 	"passing_score" integer NOT NULL,
-	"created_at" timestamp with time zone DEFAULT CURRENT_TIMESTAMP,
-	"updated_at" timestamp with time zone DEFAULT CURRENT_TIMESTAMP
+	"time_limit" integer,
+	"created_at" timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+	"updated_at" timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "units" (
@@ -95,8 +98,8 @@ CREATE TABLE IF NOT EXISTS "units" (
 	"name" text NOT NULL,
 	"content" text,
 	"order_index" integer,
-	"created_at" timestamp with time zone DEFAULT CURRENT_TIMESTAMP,
-	"updated_at" timestamp with time zone DEFAULT CURRENT_TIMESTAMP
+	"created_at" timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+	"updated_at" timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "user_analytics" (
@@ -105,15 +108,15 @@ CREATE TABLE IF NOT EXISTS "user_analytics" (
 	"average_daily_study_time" integer,
 	"total_courses_enrolled" integer,
 	"total_learning_paths_completed" integer,
-	"created_at" timestamp with time zone DEFAULT CURRENT_TIMESTAMP,
-	"updated_at" timestamp with time zone DEFAULT CURRENT_TIMESTAMP
+	"created_at" timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+	"updated_at" timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "user_badges" (
 	"id" serial PRIMARY KEY NOT NULL,
 	"user_id" integer NOT NULL,
 	"badge_id" integer NOT NULL,
-	"earned_at" timestamp with time zone DEFAULT CURRENT_TIMESTAMP
+	"earned_at" timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "user_course_progress" (
@@ -121,8 +124,8 @@ CREATE TABLE IF NOT EXISTS "user_course_progress" (
 	"user_id" integer NOT NULL,
 	"course_id" integer NOT NULL,
 	"current_module_id" integer,
-	"completion_status" "completion_status" DEFAULT 'not_started',
-	"started_at" timestamp with time zone,
+	"completion_status" "completion_status" DEFAULT 'not_started' NOT NULL,
+	"started_at" timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
 	"completed_at" timestamp with time zone
 );
 --> statement-breakpoint
@@ -143,8 +146,8 @@ CREATE TABLE IF NOT EXISTS "user_screening_results" (
 	"learning_path_id" integer NOT NULL,
 	"score" integer,
 	"recommended_path_id" integer,
-	"created_at" timestamp with time zone DEFAULT CURRENT_TIMESTAMP,
-	"updated_at" timestamp with time zone DEFAULT CURRENT_TIMESTAMP
+	"created_at" timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+	"updated_at" timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "users" (
@@ -156,8 +159,8 @@ CREATE TABLE IF NOT EXISTS "users" (
 	"address" text,
 	"date_of_birth" date,
 	"study_hours" integer DEFAULT 0,
-	"created_at" timestamp with time zone DEFAULT CURRENT_TIMESTAMP,
-	"updated_at" timestamp with time zone DEFAULT CURRENT_TIMESTAMP,
+	"created_at" timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+	"updated_at" timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
 	CONSTRAINT "users_email_key" UNIQUE("email")
 );
 --> statement-breakpoint

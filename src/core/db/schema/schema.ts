@@ -1,22 +1,23 @@
-import {
-  pgTable,
-  foreignKey,
-  serial,
-  integer,
-  timestamp,
-  text,
-  unique,
-  date,
-  boolean,
-  pgEnum,
-} from "drizzle-orm/pg-core";
 import { sql } from "drizzle-orm";
+import {
+  boolean,
+  date,
+  foreignKey,
+  integer,
+  pgEnum,
+  pgTable,
+  serial,
+  text,
+  timestamp,
+  unique,
+} from "drizzle-orm/pg-core";
 
 export const completionStatus = pgEnum("completion_status", [
   "not_started",
   "in_progress",
   "completed",
 ]);
+export const completionStatusEnum = completionStatus.enumValues;
 export const learningPathLevel = pgEnum("learning_path_level", [
   "beginner",
   "intermediate",
@@ -29,6 +30,8 @@ export const quizAttemptStatus = pgEnum("quiz_attempt_status", [
   "completed",
   "failed",
 ]);
+
+export const quizAttemptStatusEnum = quizAttemptStatus.enumValues;
 
 export const userLearningPathProgress = pgTable(
   "user_learning_path_progress",
@@ -92,8 +95,9 @@ export const courses = pgTable(
     id: serial().primaryKey().notNull(),
     name: text().notNull(),
     learningPathId: integer("learning_path_id").notNull(),
-    totalLessons: integer("total_lessons").default(0),
+    totalModules: integer("total_modules").default(0),
     description: text(),
+    orderIndex: integer("order_index").notNull(),
     createdAt: timestamp("created_at", {
       withTimezone: true,
       mode: "string",
@@ -125,7 +129,7 @@ export const modules = pgTable(
     courseId: integer("course_id").notNull(),
     name: text().notNull(),
     description: text(),
-    orderIndex: integer("order_index"),
+    orderIndex: integer("order_index").notNull(),
     createdAt: timestamp("created_at", {
       withTimezone: true,
       mode: "string",
@@ -220,9 +224,15 @@ export const userCourseProgress = pgTable(
     userId: integer("user_id").notNull(),
     courseId: integer("course_id").notNull(),
     currentModuleId: integer("current_module_id"),
-    completionStatus:
-      completionStatus("completion_status").default("not_started"),
-    startedAt: timestamp("started_at", { withTimezone: true, mode: "string" }),
+    completionStatus: completionStatus("completion_status")
+      .default("not_started")
+      .notNull(),
+    startedAt: timestamp("started_at", {
+      withTimezone: true,
+      mode: "string",
+    })
+      .default(sql`CURRENT_TIMESTAMP`)
+      .notNull(),
     completedAt: timestamp("completed_at", {
       withTimezone: true,
       mode: "string",
@@ -258,6 +268,7 @@ export const quizzes = pgTable(
     description: text(),
     totalQuestions: integer("total_questions").notNull(),
     passingScore: integer("passing_score").notNull(),
+    timeLimit: integer("time_limit"),
     createdAt: timestamp("created_at", {
       withTimezone: true,
       mode: "string",

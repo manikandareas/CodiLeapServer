@@ -17,6 +17,10 @@ Response Body (Success) :
   "data": {
     "quizId": "integer",
     "title": "string",
+    "description": "string",
+    "totalQuestions": "integer",
+    "passingScore": "integer",
+    "timeLimit": "integer", // in seconds,
     "questions": [
       {
         "id": "integer",
@@ -28,8 +32,7 @@ Response Body (Success) :
           }
         ]
       }
-    ],
-    "timeLimit": "integer" // in seconds
+    ]
   }
 }
 ```

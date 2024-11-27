@@ -3,9 +3,10 @@ import { logger } from "hono/logger";
 
 import { csrf } from "hono/csrf";
 import authRoute from "./auth_route";
-import { Env } from "@/middlewares/auth_middleware";
+import quizRoute from "./quiz_route";
+import progressRoute from "./progress_route";
 
-export const routes = (app: Hono<{ Variables: Env }>) => {
+export const routes = (app: Hono) => {
   app.use("*", logger());
   app.use("*", csrf({ origin: "localhost" }));
 
@@ -18,4 +19,6 @@ export const routes = (app: Hono<{ Variables: Env }>) => {
   );
 
   app.route("/auth", authRoute);
+  app.route("/quiz", quizRoute);
+  app.route("/progress", progressRoute);
 };

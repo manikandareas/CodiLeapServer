@@ -1,10 +1,10 @@
 # Progress API Spec
 
-## Update Lesson Progress
+## Update Course Progress
 
-Endpoint : PATCH /api/progress/lesson/{lessonId}
+Endpoint : PATCH /api/progress/course/{courseId}
 
-Description : This endpoint is used to update lesson progress.
+Description : This endpoint is used to update course progress.
 
 - Authorization: Bearer {access_token}
 
@@ -13,9 +13,10 @@ Request Body :
 ```json
 {
   "userId": "integer",
-  "status": "COMPLETED",
-  "timeSpent": "integer" // in seconds
-// lisen id 
+  "courseId": "integer",
+  "currentModuleId": "integer",
+  "completionStatus": "COMPLETED"
+  // lisen id
 }
 ```
 
@@ -23,7 +24,7 @@ Response Body (Success) :
 
 ```json
 {
-  "message": "Update lesson progress successfully",
+  "message": "Update course progress successfully",
   "status": "OK",
   "data": {
     "lessonId": "integer",
@@ -70,10 +71,10 @@ Response Body (Success) :
   "status": "Created",
   "data": {
     "overallProgress": {
-      "completedModules": "integer",
-      "totalModules": "integer",
-      "completedLessons": "integer",
-      "totalLessons": "integer"
+      "completedCourse": "integer",
+      "totalCourse": "integer",
+      "completedModule": "integer",
+      "totalModule": "integer"
     },
     "currentStreak": "integer",
     "longestStreak": "integer",
