@@ -1,25 +1,25 @@
-# Module & Lesson Path API Spec
+# Course & Module Path API Spec
 
-## Get Modules by Learning Path ID
+## Get Courses by Learning Path ID
 
-Endpoint : GET /api/modules/{learningPathId}
+Endpoint : GET /api/courses/{learningPathId}
 
 - Authorization: Bearer {access_token}
 
-Description : This endpoint is used to get all modules by learning path ID.
+Description : This endpoint is used to get all courses by learning path ID.
 
 Response Body (Success) :
 
 ```json
 {
-  "message": "Modules retrieved successfully",
+  "message": "Courses retrieved successfully",
   "status": "OK",
   "data": [
     {
       "id": "integer",
       "name": "string",
       "description": "string",
-      "totalLessons": "integer",
+      "totalModules": "integer",
       "progress": {
         "completed": "integer",
         "total": "integer",
@@ -41,19 +41,19 @@ Response Body (Not Found) :
 }
 ```
 
-## Get Lesson by Module ID
+## Get Modules by Course ID
 
-Endpoint : POST /api/modules/{moduleId}/lessons
+Endpoint : POST /api/courses/{courseId}/modules
 
 - Authorization: Bearer {access_token}
 
-Description : This endpoint is used to get all lessons by module ID.
+Description : This endpoint is used to get all modules by course ID.
 
 Response Body (Success) :
 
 ```json
 {
-  "message": "Lessons retrieved successfully",
+  "message": "Modules retrieved successfully",
   "status": "OK",
   "data": [
     {
@@ -79,7 +79,7 @@ Response Body (Not Found) :
 ```json
 {
   "status": "Not Found",
-  "error": "module not found",
+  "error": "course not found",
   "errors": null
 }
 ```

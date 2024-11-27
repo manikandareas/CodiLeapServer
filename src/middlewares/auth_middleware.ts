@@ -2,6 +2,7 @@ import { MiddlewareHandler } from "hono";
 import { HTTPException } from "hono/http-exception";
 import { StatusCodes } from "http-status-codes";
 import { verifyToken } from "@/core/utils/jwt";
+import { JwtPayload } from "@/core/models/auth_model";
 
 export const authMiddleware: MiddlewareHandler = async (c, next) => {
   const authHeader = c.req.header("Authorization");
@@ -27,6 +28,6 @@ export const authMiddleware: MiddlewareHandler = async (c, next) => {
 };
 
 export type Env = {
-  token: string;
+  token: JwtPayload;
   tokenString: string;
 };
