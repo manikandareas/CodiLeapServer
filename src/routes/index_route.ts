@@ -19,8 +19,11 @@ export const routes = (app: Hono) => {
     })
   );
 
-  app.route("/auth", authRoute);
+ app.route("/auth", authRoute);
   app.route("/quiz", quizRoute);
   app.route("/progress", progressRoute);
   app.route("/course",courseRoute);
+  app.route("/badge",badgesRoute);
+  app.route("/virtual",virtualAssistantRoute);
+  app.route("/analytics",analyticsRoute);
 };
