@@ -2,7 +2,7 @@
 
 ## Get Courses by Learning Path ID
 
-Endpoint : GET /api/courses/{learningPathId}
+Endpoint : GET /api/courses/{courseId}
 
 - Authorization: Bearer {access_token}
 
