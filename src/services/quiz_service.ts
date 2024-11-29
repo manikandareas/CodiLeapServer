@@ -2,8 +2,8 @@ import db from "@/core/db";
 import { quizAttemptDetails, quizAttempts } from "@/core/db/schema";
 import {
   DailyQuizType,
-  QuizAttemptRequestType,
-  QuizAttemptType,
+  SubmitQuizRequestType,
+  SubmitQuizType,
 } from "@/core/models/quiz_model";
 import { HTTPException } from "hono/http-exception";
 import { StatusCodes } from "http-status-codes";
@@ -55,10 +55,10 @@ export const getDailyQuiz = async (userId: number): Promise<DailyQuizType> => {
   });
 };
 
-export const quizAttempt = async (
+export const submitQuiz = async (
   userId: number,
-  request: QuizAttemptRequestType
-): Promise<QuizAttemptType> => {
+  request: SubmitQuizRequestType
+): Promise<SubmitQuizType> => {
   return db.transaction(async (tx) => {
     const quizAttempt = await tx.query.quizAttempts.findFirst({
       where: (attempt, { eq, and }) =>

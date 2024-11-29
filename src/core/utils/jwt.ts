@@ -1,3 +1,5 @@
+import { HTTPException } from "hono/http-exception";
+import { StatusCodes } from "http-status-codes";
 import * as jwt from "jsonwebtoken";
 import { JwtPayload } from "jsonwebtoken";
 
@@ -26,7 +28,9 @@ export const verifyToken = (token: string): CustomJwtPayload => {
   try {
     return jwt.verify(token, process.env.JWT_SECRET!) as CustomJwtPayload;
   } catch (error) {
-    throw new Error("Invalid or expired token");
+    throw new HTTPException(StatusCodes.UNAUTHORIZED, {
+      message: "Invalid or expired token",
+    });
   }
 };
 
