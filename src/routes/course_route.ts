@@ -1,48 +1,48 @@
-import { Hono } from "hono";
-import { getReasonPhrase, StatusCodes } from "http-status-codes";
-import { ApiResponse } from "@/core/models/api_model";
-import { CourseType } from "@/core/models/course_model";
 import { authMiddleware, Env } from "@/middlewares/auth_middleware";
-import { getCoursesWithProgress } from "@/services/course_service";  // Service to fetch courses with progress
+import {
+  completeModule,
+  getCoursesByLearningPathID,
+  getModulesByCourseId,
+} from "@/services/course_service";
+import { Hono } from "hono";
+import { StatusCodes } from "http-status-codes";
 
-export const courseRoute = new Hono<{ Variables: Env }>();
+const courseRoute = new Hono<{ Variables: Env }>();
 
-// Define the route for GET /courses/:learningPathId/:userId
-courseRoute.get("/:learningPathId/:userId", authMiddleware, async (c) => {
-  const userId = parseInt(c.req.param("userId"), 10);
-  const learningPathId = parseInt(c.req.param("learningPathId"), 10);
+courseRoute.get("/:learningPathId", authMiddleware, async (c) => {
+  const learningPathId = c.req.param("learningPathId");
+  const courses = await getCoursesByLearningPathID(+learningPathId);
 
-  // Validate if the userId and learningPathId are valid integers
-  if (isNaN(userId) || isNaN(learningPathId)) {
-    return c.json(
-      {
-        status: getReasonPhrase(StatusCodes.BAD_REQUEST),
-        message: "Invalid parameters provided.",
-      },
-      StatusCodes.BAD_REQUEST
-    );
-  }
+  return c.json({
+    message: "Courses fetched successfully",
+    status: StatusCodes.OK,
+    data: courses,
+  });
+});
 
-  try {
-    // Fetch courses and progress for the user and learning path
-    const coursesWithProgress: CourseType[] = await getCoursesWithProgress(userId, learningPathId);
+courseRoute.get("/:courseId/modules", authMiddleware, async (c) => {
+  const courseId = c.req.param("courseId");
 
-    // Return the response with courses and progress data
-    return c.json({
-      status: getReasonPhrase(StatusCodes.OK),
-      message: "Courses fetched successfully",
-      data: coursesWithProgress,
-    } satisfies ApiResponse<CourseType[]>);
-  } catch (error) {
-    // Handle any errors during the fetching process
-    return c.json(
-      {
-        status: getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR),
-        message: error.message || "An error occurred while fetching courses.",
-      },
-      StatusCodes.INTERNAL_SERVER_ERROR
-    );
-  }
+  const modules = await getModulesByCourseId(+courseId);
+
+  return c.json({
+    message: "Modules fetched successfully",
+    status: StatusCodes.OK,
+    data: modules,
+  });
+});
+
+courseRoute.put("/:courseId/modules/complete", authMiddleware, async (c) => {
+  const user = c.var.token;
+  const courseId = c.req.param("courseId");
+  console.log("courseId", courseId);
+
+  const response = await completeModule(user.id, +courseId);
+
+  return c.json({
+    status: "OK",
+    message: "Module completed successfully",
+  });
 });
 
 export default courseRoute;

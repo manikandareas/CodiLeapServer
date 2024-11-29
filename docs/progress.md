@@ -1,6 +1,6 @@
 # Progress API Spec
 
-## Update Course Progress
+## Complete Course
 
 Endpoint : PATCH /api/progress/course/{courseId}
 

@@ -9,7 +9,7 @@ export const authMiddleware: MiddlewareHandler = async (c, next) => {
 
   if (!authHeader) {
     throw new HTTPException(StatusCodes.UNAUTHORIZED, {
-      message: "No token provided",
+      message: "Unauthorized",
     });
   }
 

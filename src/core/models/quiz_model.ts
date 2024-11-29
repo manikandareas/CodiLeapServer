@@ -39,7 +39,7 @@ export const DailyQuizResponse = z.object({
 
 export type DailyQuizType = z.infer<typeof DailyQuizResponse>;
 
-export const QuizAttemptRequest = z.object({
+export const SubmitQuizRequest = z.object({
   quizId: z.number(),
   answers: z.array(
     z.object({
@@ -49,9 +49,9 @@ export const QuizAttemptRequest = z.object({
   ),
 });
 
-export type QuizAttemptRequestType = z.infer<typeof QuizAttemptRequest>;
+export type SubmitQuizRequestType = z.infer<typeof SubmitQuizRequest>;
 
-export const QuizAttemptResponse = z.object({
+export const SubmitQuizResponse = z.object({
   id: z.number(),
   quizId: z.number(),
   totalScore: z.number(),
@@ -61,4 +61,4 @@ export const QuizAttemptResponse = z.object({
   createdAt: z.string(),
 });
 
-export type QuizAttemptType = z.infer<typeof QuizAttemptResponse>;
+export type SubmitQuizType = z.infer<typeof SubmitQuizResponse>;
