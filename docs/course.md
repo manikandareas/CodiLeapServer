@@ -18,13 +18,17 @@ Response Body (Success) :
     {
       "id": "integer",
       "name": "string",
-      "description": "string",
+      "learningPathId": "integer",
       "totalModules": "integer",
-      "progress": {
-        "completed": "integer",
-        "total": "integer",
-        "percentage": "float"
-      }
+      "description": "string",
+      "createdAt": "string",
+      "updatedAt": "string",
+      "orderIndex": "integer",
+      // "progress": {
+      //   "completed": "integer",
+      //   "total": "integer",
+      //   "percentage": "float"
+      // }
     },
     ...
   ]
@@ -58,14 +62,21 @@ Response Body (Success) :
   "data": [
     {
       "id": "integer",
+      "courseId": "integer",
       "name": "string",
-      "status": "NOT_STARTED|IN_PROGRESS|COMPLETED",
+      "description": "string",
+      "orderIndex": "integer",
+      "createdAt": "string",
+      "updatedAt": "string",
       "units": [
         {
           "id": "integer",
-          "order": "integer",
+          "moduleId": "integer",
+          "name": "string",
           "content": "string",
-          "type": "HTML|INTERACTIVE"
+          "orderIndex": "integer",
+          "createdAt": "string",
+          "updatedAt": "string"
         }
       ]
     },

@@ -1,12 +1,12 @@
 import { ApiResponse } from "@/core/models/api_model";
 import {
   DailyQuizType,
-  QuizAttemptRequest,
-  QuizAttemptType,
+  SubmitQuizRequest,
+  SubmitQuizType,
 } from "@/core/models/quiz_model";
 import { authMiddleware, Env } from "@/middlewares/auth_middleware";
 import { errorValidationParser } from "@/middlewares/error_validation_parser";
-import { getDailyQuiz, quizAttempt } from "@/services/quiz_service";
+import { getDailyQuiz, submitQuiz } from "@/services/quiz_service";
 import { zValidator } from "@hono/zod-validator";
 import { Hono } from "hono";
 import { getReasonPhrase, StatusCodes } from "http-status-codes";
@@ -27,17 +27,17 @@ quizRoute.get("/", authMiddleware, async (c) => {
 quizRoute.post(
   "/submit",
   authMiddleware,
-  zValidator("json", QuizAttemptRequest, errorValidationParser),
+  zValidator("json", SubmitQuizRequest, errorValidationParser),
   async (c) => {
     const user = c.get("token");
     const data = c.req.valid("json");
-    const quiz = await quizAttempt(user.id, data);
+    const quiz = await submitQuiz(user.id, data);
 
     return c.json({
       status: getReasonPhrase(StatusCodes.OK),
       message: "Quiz submitted successfully",
       data: quiz,
-    } satisfies ApiResponse<QuizAttemptType>);
+    } satisfies ApiResponse<SubmitQuizType>);
   }
 );
 

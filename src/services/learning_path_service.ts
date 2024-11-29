@@ -4,21 +4,15 @@ import { LearningPathResponseType } from "@/core/models/learning_path_model";
 import { HTTPException } from "hono/http-exception";
 import { StatusCodes } from "http-status-codes";
 
-export const getAllLearningPaths = async (): Promise<
+export const getAllLearningPathsWithCourses = async (): Promise<
   LearningPathResponseType[]
 > => {
   const learningPaths = await db.query.learningPaths.findMany({
     with: {
-      courses: {
-        columns: { id: true },
-      },
+      courses: true,
     },
   });
-
-  return learningPaths.map((it) => ({
-    ...it,
-    totalCourses: it.courses.length,
-  }));
+  return learningPaths;
 };
 
 export const learningPathScreening = async (userId: number) => {};
@@ -30,6 +24,23 @@ export const enrollLearningPath = async (
   // Start a transaction to ensure data consistency
   return await db.transaction(async (tx) => {
     // Find the first course in the learning path
+
+    const isAlreadyEnrolled = await tx.query.userLearningPathProgress.findFirst(
+      {
+        where: (progress, { and, eq }) =>
+          and(
+            eq(progress.userId, userId),
+            eq(progress.learningPathId, learningPathId)
+          ),
+      }
+    );
+
+    if (isAlreadyEnrolled) {
+      throw new HTTPException(StatusCodes.CONFLICT, {
+        message: "User already enrolled in this learning path",
+      });
+    }
+
     const firstCourse = await tx.query.courses.findFirst({
       where: (courses, { eq }) => eq(courses.learningPathId, learningPathId),
       orderBy: (courses, { asc }) => asc(courses.orderIndex),
