@@ -4,22 +4,20 @@ import { sql } from "drizzle-orm";
 // Complete Module
 
 type LearningProgressResponse = {
-  data: {
-    overallProgress: {
-      completedCourse: number;
-      totalCourse: number;
-      completedModule: number;
-      totalModule: number;
-    };
-    currentStreak: number;
-    longestStreak: number;
-    averageDailyTime: number;
-    learningPathProgress: Array<{
-      pathId: number;
-      pathName: string;
-      progress: number;
-    }>;
+  overallProgress: {
+    completedCourse: number;
+    totalCourse: number;
+    completedModule: number;
+    totalModule: number;
   };
+  currentStreak: number;
+  longestStreak: number;
+  averageDailyTime: number;
+  learningPathProgress: Array<{
+    pathId: number;
+    pathName: string;
+    progress: number;
+  }>;
 };
 
 const calculateQuizStreak = async (userId: number) => {
@@ -154,26 +152,24 @@ export const getLearningProgress = async (
 
   // Prepare response
   return {
-    data: {
-      overallProgress: {
-        completedCourse: Number(
-          overallProgressResult.rows[0].completed_course_count
-        ),
-        totalCourse: Number(overallProgressResult.rows[0].total_course_count),
-        completedModule: Number(
-          overallProgressResult.rows[0].completed_module_count
-        ),
-        totalModule: Number(overallProgressResult.rows[0].total_module_count),
-      },
-      currentStreak: streakResult.current_streak || 0,
-      longestStreak: streakResult.longest_streak || 0,
-      averageDailyTime: userAnalyticsResult?.averageDailyStudyTime || 0,
-      learningPathProgress: learningPathProgressResult.rows.map((row) => ({
-        pathId: row.path_id as number,
-        pathName: row.path_name as string,
-        progress: Number(row.progress),
-      })),
+    overallProgress: {
+      completedCourse: Number(
+        overallProgressResult.rows[0].completed_course_count
+      ),
+      totalCourse: Number(overallProgressResult.rows[0].total_course_count),
+      completedModule: Number(
+        overallProgressResult.rows[0].completed_module_count
+      ),
+      totalModule: Number(overallProgressResult.rows[0].total_module_count),
     },
+    currentStreak: streakResult.current_streak || 0,
+    longestStreak: streakResult.longest_streak || 0,
+    averageDailyTime: userAnalyticsResult?.averageDailyStudyTime || 0,
+    learningPathProgress: learningPathProgressResult.rows.map((row) => ({
+      pathId: row.path_id as number,
+      pathName: row.path_name as string,
+      progress: Number(row.progress),
+    })),
   };
 };
 
