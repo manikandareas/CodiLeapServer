@@ -13,6 +13,7 @@ import analyticsRoute from "./analytics_route";
 export const routes = (app: Hono) => {
   app.use("*", logger());
   // app.use("*", csrf({ origin: "localhost" }));
+  // app.use("*", csrf({ origin: "localhost" }));
 
   app.get("/health", (c) =>
     c.json({
