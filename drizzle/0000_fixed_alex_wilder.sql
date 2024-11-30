@@ -1,6 +1,6 @@
-CREATE TYPE "public"."completion_status" AS ENUM('not_started', 'in_progress', 'completed');--> statement-breakpoint
-CREATE TYPE "public"."learning_path_level" AS ENUM('beginner', 'intermediate', 'advanced');--> statement-breakpoint
-CREATE TYPE "public"."quiz_attempt_status" AS ENUM('started', 'completed', 'failed');--> statement-breakpoint
+-- CREATE TYPE "public"."completion_status" AS ENUM('not_started', 'in_progress', 'completed');--> statement-breakpoint
+-- CREATE TYPE "public"."learning_path_level" AS ENUM('beginner', 'intermediate', 'advanced');--> statement-breakpoint
+-- CREATE TYPE "public"."quiz_attempt_status" AS ENUM('started', 'completed', 'failed');--> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "answer_options" (
 	"id" serial PRIMARY KEY NOT NULL,
 	"question_id" integer NOT NULL,
@@ -24,9 +24,9 @@ CREATE TABLE IF NOT EXISTS "courses" (
 	"learning_path_id" integer NOT NULL,
 	"total_modules" integer DEFAULT 0,
 	"description" text,
-	"order_index" integer NOT NULL,
 	"created_at" timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
-	"updated_at" timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
+	"updated_at" timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+	"order_index" integer NOT NULL
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "learning_paths" (
@@ -34,9 +34,9 @@ CREATE TABLE IF NOT EXISTS "learning_paths" (
 	"name" text NOT NULL,
 	"level" "learning_path_level" NOT NULL,
 	"description" text NOT NULL,
-	"estimated_duration" integer,
 	"created_at" timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
-	"updated_at" timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
+	"updated_at" timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+	"estimated_duration" integer
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "modules" (
@@ -87,9 +87,9 @@ CREATE TABLE IF NOT EXISTS "quizzes" (
 	"description" text,
 	"total_questions" integer NOT NULL,
 	"passing_score" integer NOT NULL,
-	"time_limit" integer,
 	"created_at" timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
-	"updated_at" timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
+	"updated_at" timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+	"time_limit" integer
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "units" (
@@ -109,7 +109,9 @@ CREATE TABLE IF NOT EXISTS "user_analytics" (
 	"total_courses_enrolled" integer,
 	"total_learning_paths_completed" integer,
 	"created_at" timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
-	"updated_at" timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
+	"updated_at" timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+	"chronotype" text,
+	"average_session_duration" integer
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "user_badges" (
@@ -127,6 +129,19 @@ CREATE TABLE IF NOT EXISTS "user_course_progress" (
 	"completion_status" "completion_status" DEFAULT 'not_started' NOT NULL,
 	"started_at" timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
 	"completed_at" timestamp with time zone
+);
+--> statement-breakpoint
+CREATE TABLE IF NOT EXISTS "user_daily_progress" (
+	"id" serial PRIMARY KEY NOT NULL,
+	"user_id" integer NOT NULL,
+	"date" date NOT NULL,
+	"time_spent" integer,
+	"lessons_completed" integer DEFAULT 0,
+	"quizzes_taken" integer DEFAULT 0,
+	"progress_percentage" numeric(5, 2),
+	"productive_hours" integer[] DEFAULT '{}',
+	"created_at" timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+	CONSTRAINT "unique_user_date" UNIQUE("user_id","date")
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "user_learning_path_progress" (
@@ -276,6 +291,12 @@ END $$;
 --> statement-breakpoint
 DO $$ BEGIN
  ALTER TABLE "user_course_progress" ADD CONSTRAINT "user_course_progress_current_module_id_fkey" FOREIGN KEY ("current_module_id") REFERENCES "public"."modules"("id") ON DELETE no action ON UPDATE no action;
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
+DO $$ BEGIN
+ ALTER TABLE "user_daily_progress" ADD CONSTRAINT "user_daily_progress_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "public"."users"("id") ON DELETE no action ON UPDATE no action;
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;

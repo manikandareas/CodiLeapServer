@@ -16,6 +16,7 @@ import {
   badges,
   userBadges,
   virtualAssistantChats,
+  userDailyProgress,
   userAnalytics,
 } from "./schema";
 
@@ -44,6 +45,7 @@ export const usersRelations = relations(users, ({ many }) => ({
   userScreeningResults: many(userScreeningResults),
   userBadges: many(userBadges),
   virtualAssistantChats: many(virtualAssistantChats),
+  userDailyProgresses: many(userDailyProgress),
   userAnalytics: many(userAnalytics),
 }));
 
@@ -215,6 +217,16 @@ export const virtualAssistantChatsRelations = relations(
   ({ one }) => ({
     user: one(users, {
       fields: [virtualAssistantChats.userId],
+      references: [users.id],
+    }),
+  })
+);
+
+export const userDailyProgressRelations = relations(
+  userDailyProgress,
+  ({ one }) => ({
+    user: one(users, {
+      fields: [userDailyProgress.userId],
       references: [users.id],
     }),
   })
