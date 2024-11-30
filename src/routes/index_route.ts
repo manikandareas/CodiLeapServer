@@ -7,9 +7,12 @@ import quizRoute from "./quiz_route";
 import progressRoute from "./progress_route";
 import learningPathRoute from "./learning_path_route";
 import courseRoute from "./course_route";
+import badgesRoute from "./badge_route";
+import analyticsRoute from "./analytics_route";
 
 export const routes = (app: Hono) => {
   app.use("*", logger());
+  // app.use("*", csrf({ origin: "localhost" }));
   // app.use("*", csrf({ origin: "localhost" }));
 
   app.get("/health", (c) =>
@@ -25,4 +28,6 @@ export const routes = (app: Hono) => {
   app.route("/progress", progressRoute);
   app.route("/learning-paths", learningPathRoute);
   app.route("/courses", courseRoute);
+  app.route("/badges", badgesRoute);
+  app.route("/analytics", analyticsRoute);
 };

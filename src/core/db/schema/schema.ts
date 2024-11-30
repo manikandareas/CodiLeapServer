@@ -1,36 +1,36 @@
-import { sql } from "drizzle-orm";
 import {
-  boolean,
-  date,
-  foreignKey,
-  integer,
-  pgEnum,
   pgTable,
+  foreignKey,
   serial,
-  text,
+  integer,
   timestamp,
+  text,
   unique,
+  date,
+  boolean,
+  numeric,
+  pgEnum,
 } from "drizzle-orm/pg-core";
+import { sql } from "drizzle-orm";
 
 export const completionStatus = pgEnum("completion_status", [
   "not_started",
   "in_progress",
   "completed",
 ]);
+
 export const completionStatusEnum = completionStatus.enumValues;
 export const learningPathLevel = pgEnum("learning_path_level", [
   "beginner",
   "intermediate",
   "advanced",
 ]);
-
 export const learningPathLevelEnum = learningPathLevel.enumValues;
 export const quizAttemptStatus = pgEnum("quiz_attempt_status", [
   "started",
   "completed",
   "failed",
 ]);
-
 export const quizAttemptStatusEnum = quizAttemptStatus.enumValues;
 
 export const userLearningPathProgress = pgTable(
@@ -69,26 +69,6 @@ export const userLearningPathProgress = pgTable(
   }
 );
 
-export const learningPaths = pgTable("learning_paths", {
-  id: serial().primaryKey().notNull(),
-  name: text().notNull(),
-  level: learningPathLevel().notNull(),
-  description: text().notNull(),
-  estimatedDuration: integer("estimated_duration"),
-  createdAt: timestamp("created_at", {
-    withTimezone: true,
-    mode: "string",
-  })
-    .default(sql`CURRENT_TIMESTAMP`)
-    .notNull(),
-  updatedAt: timestamp("updated_at", {
-    withTimezone: true,
-    mode: "string",
-  })
-    .default(sql`CURRENT_TIMESTAMP`)
-    .notNull(),
-});
-
 export const courses = pgTable(
   "courses",
   {
@@ -97,19 +77,13 @@ export const courses = pgTable(
     learningPathId: integer("learning_path_id").notNull(),
     totalModules: integer("total_modules").default(0),
     description: text(),
+    createdAt: timestamp("created_at", { withTimezone: true, mode: "string" })
+      .default(sql`CURRENT_TIMESTAMP`)
+      .notNull(),
+    updatedAt: timestamp("updated_at", { withTimezone: true, mode: "string" })
+      .default(sql`CURRENT_TIMESTAMP`)
+      .notNull(),
     orderIndex: integer("order_index").notNull(),
-    createdAt: timestamp("created_at", {
-      withTimezone: true,
-      mode: "string",
-    })
-      .default(sql`CURRENT_TIMESTAMP`)
-      .notNull(),
-    updatedAt: timestamp("updated_at", {
-      withTimezone: true,
-      mode: "string",
-    })
-      .default(sql`CURRENT_TIMESTAMP`)
-      .notNull(),
   },
   (table) => {
     return {
@@ -130,16 +104,10 @@ export const modules = pgTable(
     name: text().notNull(),
     description: text(),
     orderIndex: integer("order_index").notNull(),
-    createdAt: timestamp("created_at", {
-      withTimezone: true,
-      mode: "string",
-    })
+    createdAt: timestamp("created_at", { withTimezone: true, mode: "string" })
       .default(sql`CURRENT_TIMESTAMP`)
       .notNull(),
-    updatedAt: timestamp("updated_at", {
-      withTimezone: true,
-      mode: "string",
-    })
+    updatedAt: timestamp("updated_at", { withTimezone: true, mode: "string" })
       .default(sql`CURRENT_TIMESTAMP`)
       .notNull(),
   },
@@ -162,16 +130,10 @@ export const units = pgTable(
     name: text().notNull(),
     content: text(),
     orderIndex: integer("order_index"),
-    createdAt: timestamp("created_at", {
-      withTimezone: true,
-      mode: "string",
-    })
+    createdAt: timestamp("created_at", { withTimezone: true, mode: "string" })
       .default(sql`CURRENT_TIMESTAMP`)
       .notNull(),
-    updatedAt: timestamp("updated_at", {
-      withTimezone: true,
-      mode: "string",
-    })
+    updatedAt: timestamp("updated_at", { withTimezone: true, mode: "string" })
       .default(sql`CURRENT_TIMESTAMP`)
       .notNull(),
   },
@@ -197,16 +159,10 @@ export const users = pgTable(
     address: text(),
     dateOfBirth: date("date_of_birth"),
     studyHours: integer("study_hours").default(0),
-    createdAt: timestamp("created_at", {
-      withTimezone: true,
-      mode: "string",
-    })
+    createdAt: timestamp("created_at", { withTimezone: true, mode: "string" })
       .default(sql`CURRENT_TIMESTAMP`)
       .notNull(),
-    updatedAt: timestamp("updated_at", {
-      withTimezone: true,
-      mode: "string",
-    })
+    updatedAt: timestamp("updated_at", { withTimezone: true, mode: "string" })
       .default(sql`CURRENT_TIMESTAMP`)
       .notNull(),
   },
@@ -227,10 +183,7 @@ export const userCourseProgress = pgTable(
     completionStatus: completionStatus("completion_status")
       .default("not_started")
       .notNull(),
-    startedAt: timestamp("started_at", {
-      withTimezone: true,
-      mode: "string",
-    })
+    startedAt: timestamp("started_at", { withTimezone: true, mode: "string" })
       .default(sql`CURRENT_TIMESTAMP`)
       .notNull(),
     completedAt: timestamp("completed_at", {
@@ -259,6 +212,20 @@ export const userCourseProgress = pgTable(
   }
 );
 
+export const learningPaths = pgTable("learning_paths", {
+  id: serial().primaryKey().notNull(),
+  name: text().notNull(),
+  level: learningPathLevel().notNull(),
+  description: text().notNull(),
+  createdAt: timestamp("created_at", { withTimezone: true, mode: "string" })
+    .default(sql`CURRENT_TIMESTAMP`)
+    .notNull(),
+  updatedAt: timestamp("updated_at", { withTimezone: true, mode: "string" })
+    .default(sql`CURRENT_TIMESTAMP`)
+    .notNull(),
+  estimatedDuration: integer("estimated_duration"),
+});
+
 export const quizzes = pgTable(
   "quizzes",
   {
@@ -268,19 +235,13 @@ export const quizzes = pgTable(
     description: text(),
     totalQuestions: integer("total_questions").notNull(),
     passingScore: integer("passing_score").notNull(),
+    createdAt: timestamp("created_at", { withTimezone: true, mode: "string" })
+      .default(sql`CURRENT_TIMESTAMP`)
+      .notNull(),
+    updatedAt: timestamp("updated_at", { withTimezone: true, mode: "string" })
+      .default(sql`CURRENT_TIMESTAMP`)
+      .notNull(),
     timeLimit: integer("time_limit"),
-    createdAt: timestamp("created_at", {
-      withTimezone: true,
-      mode: "string",
-    })
-      .default(sql`CURRENT_TIMESTAMP`)
-      .notNull(),
-    updatedAt: timestamp("updated_at", {
-      withTimezone: true,
-      mode: "string",
-    })
-      .default(sql`CURRENT_TIMESTAMP`)
-      .notNull(),
   },
   (table) => {
     return {
@@ -300,16 +261,10 @@ export const questions = pgTable(
     quizId: integer("quiz_id").notNull(),
     text: text().notNull(),
     pointValue: integer("point_value").notNull(),
-    createdAt: timestamp("created_at", {
-      withTimezone: true,
-      mode: "string",
-    })
+    createdAt: timestamp("created_at", { withTimezone: true, mode: "string" })
       .default(sql`CURRENT_TIMESTAMP`)
       .notNull(),
-    updatedAt: timestamp("updated_at", {
-      withTimezone: true,
-      mode: "string",
-    })
+    updatedAt: timestamp("updated_at", { withTimezone: true, mode: "string" })
       .default(sql`CURRENT_TIMESTAMP`)
       .notNull(),
   },
@@ -334,16 +289,10 @@ export const quizAttempts = pgTable(
     startTime: timestamp("start_time", { withTimezone: true, mode: "string" }),
     endTime: timestamp("end_time", { withTimezone: true, mode: "string" }),
     status: quizAttemptStatus().default("started"),
-    createdAt: timestamp("created_at", {
-      withTimezone: true,
-      mode: "string",
-    })
+    createdAt: timestamp("created_at", { withTimezone: true, mode: "string" })
       .default(sql`CURRENT_TIMESTAMP`)
       .notNull(),
-    updatedAt: timestamp("updated_at", {
-      withTimezone: true,
-      mode: "string",
-    })
+    updatedAt: timestamp("updated_at", { withTimezone: true, mode: "string" })
       .default(sql`CURRENT_TIMESTAMP`)
       .notNull(),
   },
@@ -390,16 +339,10 @@ export const quizAttemptDetails = pgTable(
     questionId: integer("question_id").notNull(),
     selectedAnswerId: integer("selected_answer_id"),
     isCorrect: boolean("is_correct"),
-    createdAt: timestamp("created_at", {
-      withTimezone: true,
-      mode: "string",
-    })
+    createdAt: timestamp("created_at", { withTimezone: true, mode: "string" })
       .default(sql`CURRENT_TIMESTAMP`)
       .notNull(),
-    updatedAt: timestamp("updated_at", {
-      withTimezone: true,
-      mode: "string",
-    })
+    updatedAt: timestamp("updated_at", { withTimezone: true, mode: "string" })
       .default(sql`CURRENT_TIMESTAMP`)
       .notNull(),
   },
@@ -433,16 +376,10 @@ export const userScreeningResults = pgTable(
     learningPathId: integer("learning_path_id").notNull(),
     score: integer(),
     recommendedPathId: integer("recommended_path_id"),
-    createdAt: timestamp("created_at", {
-      withTimezone: true,
-      mode: "string",
-    })
+    createdAt: timestamp("created_at", { withTimezone: true, mode: "string" })
       .default(sql`CURRENT_TIMESTAMP`)
       .notNull(),
-    updatedAt: timestamp("updated_at", {
-      withTimezone: true,
-      mode: "string",
-    })
+    updatedAt: timestamp("updated_at", { withTimezone: true, mode: "string" })
       .default(sql`CURRENT_TIMESTAMP`)
       .notNull(),
   },
@@ -480,16 +417,10 @@ export const badges = pgTable(
     description: text(),
     imageUrl: text("image_url"),
     learningPathId: integer("learning_path_id"),
-    createdAt: timestamp("created_at", {
-      withTimezone: true,
-      mode: "string",
-    })
+    createdAt: timestamp("created_at", { withTimezone: true, mode: "string" })
       .default(sql`CURRENT_TIMESTAMP`)
       .notNull(),
-    updatedAt: timestamp("updated_at", {
-      withTimezone: true,
-      mode: "string",
-    })
+    updatedAt: timestamp("updated_at", { withTimezone: true, mode: "string" })
       .default(sql`CURRENT_TIMESTAMP`)
       .notNull(),
   },
@@ -510,10 +441,7 @@ export const userBadges = pgTable(
     id: serial().primaryKey().notNull(),
     userId: integer("user_id").notNull(),
     badgeId: integer("badge_id").notNull(),
-    earnedAt: timestamp("earned_at", {
-      withTimezone: true,
-      mode: "string",
-    })
+    earnedAt: timestamp("earned_at", { withTimezone: true, mode: "string" })
       .default(sql`CURRENT_TIMESTAMP`)
       .notNull(),
   },
@@ -555,6 +483,36 @@ export const virtualAssistantChats = pgTable(
   }
 );
 
+export const userDailyProgress = pgTable(
+  "user_daily_progress",
+  {
+    id: serial().primaryKey().notNull(),
+    userId: integer("user_id").notNull(),
+    date: date().notNull(),
+    timeSpent: integer("time_spent"),
+    lessonsCompleted: integer("lessons_completed").default(0),
+    quizzesTaken: integer("quizzes_taken").default(0),
+    progressPercentage: numeric("progress_percentage", {
+      precision: 5,
+      scale: 2,
+    }),
+    productiveHours: integer("productive_hours").array().default([]),
+    createdAt: timestamp("created_at", { withTimezone: true, mode: "string" })
+      .default(sql`CURRENT_TIMESTAMP`)
+      .notNull(),
+  },
+  (table) => {
+    return {
+      userDailyProgressUserIdFkey: foreignKey({
+        columns: [table.userId],
+        foreignColumns: [users.id],
+        name: "user_daily_progress_user_id_fkey",
+      }),
+      uniqueUserDate: unique("unique_user_date").on(table.userId, table.date),
+    };
+  }
+);
+
 export const userAnalytics = pgTable(
   "user_analytics",
   {
@@ -563,18 +521,14 @@ export const userAnalytics = pgTable(
     averageDailyStudyTime: integer("average_daily_study_time"),
     totalCoursesEnrolled: integer("total_courses_enrolled"),
     totalLearningPathsCompleted: integer("total_learning_paths_completed"),
-    createdAt: timestamp("created_at", {
-      withTimezone: true,
-      mode: "string",
-    })
+    createdAt: timestamp("created_at", { withTimezone: true, mode: "string" })
       .default(sql`CURRENT_TIMESTAMP`)
       .notNull(),
-    updatedAt: timestamp("updated_at", {
-      withTimezone: true,
-      mode: "string",
-    })
+    updatedAt: timestamp("updated_at", { withTimezone: true, mode: "string" })
       .default(sql`CURRENT_TIMESTAMP`)
       .notNull(),
+    chronotype: text(),
+    averageSessionDuration: integer("average_session_duration"),
   },
   (table) => {
     return {
