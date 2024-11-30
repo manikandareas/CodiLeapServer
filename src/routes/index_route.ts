@@ -15,6 +15,8 @@ export const routes = (app: Hono) => {
   // app.use("*", csrf({ origin: "localhost" }));
   // app.use("*", csrf({ origin: "localhost" }));
 
+  app.get("/", (c) => c.json({ message: "Welcome to the API" }));
+
   app.get("/health", (c) =>
     c.json({
       uptime: process.uptime(),

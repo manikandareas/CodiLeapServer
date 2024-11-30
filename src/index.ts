@@ -13,7 +13,6 @@ import { Env } from "./middlewares/auth_middleware";
 dotenv.config();
 
 const app = new Hono().basePath("/api");
-
 routes(app);
 
 app.onError((error, c) => {
