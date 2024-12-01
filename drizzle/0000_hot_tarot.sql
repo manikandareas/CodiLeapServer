@@ -175,6 +175,8 @@ CREATE TABLE IF NOT EXISTS "users" (
 	"date_of_birth" date,
 	"study_hours" integer DEFAULT 0,
 	"created_at" timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+	"avatar_url" text,
+	"is_already_screened" boolean DEFAULT false NOT NULL,
 	"updated_at" timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
 	CONSTRAINT "users_email_key" UNIQUE("email")
 );

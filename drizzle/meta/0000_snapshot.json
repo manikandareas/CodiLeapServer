@@ -1,5 +1,5 @@
 {
-  "id": "63ddddb6-e6c0-4c56-b633-53e1bb8f3c73",
+  "id": "eeeb1abb-4103-4bf0-b94f-7f862c63caa6",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -1359,6 +1359,19 @@
           "primaryKey": false,
           "notNull": true,
           "default": "CURRENT_TIMESTAMP"
+        },
+        "avatar_url": {
+          "name": "avatar_url",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "is_already_screened": {
+          "name": "is_already_screened",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
         },
         "updated_at": {
           "name": "updated_at",

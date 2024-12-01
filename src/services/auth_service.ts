@@ -81,6 +81,8 @@ export const loginUser = async (
     user: {
       id: user.id,
       email: user.email,
+      avatarUrl: user.avatarUrl as string,
+      isAlreadyScreened: user.isAlreadyScreened,
     },
   };
 };

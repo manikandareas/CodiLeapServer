@@ -163,6 +163,7 @@ export const users = pgTable(
       .default(sql`CURRENT_TIMESTAMP`)
       .notNull(),
     avatarUrl: text("avatar_url"),
+    isAlreadyScreened: boolean("is_already_screened").default(false).notNull(),
     updatedAt: timestamp("updated_at", { withTimezone: true, mode: "string" })
       .default(sql`CURRENT_TIMESTAMP`)
       .notNull(),

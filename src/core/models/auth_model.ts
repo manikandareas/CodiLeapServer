@@ -48,6 +48,8 @@ export type LoginResponseType = {
   user: {
     id: number;
     email: string;
+    avatarUrl: string;
+    isAlreadyScreened: boolean;
   };
 };
 
