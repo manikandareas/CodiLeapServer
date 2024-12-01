@@ -32,6 +32,7 @@ export const registerUser = async (request: RegisterUserRequestType) => {
   await db.insert(users).values({
     email: request.email,
     hashedPassword: hashedPassword,
+    avatarUrl: `https://robohash.org/${request.email}`,
   });
 };
 

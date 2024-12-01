@@ -162,6 +162,7 @@ export const users = pgTable(
     createdAt: timestamp("created_at", { withTimezone: true, mode: "string" })
       .default(sql`CURRENT_TIMESTAMP`)
       .notNull(),
+    avatarUrl: text("avatar_url"),
     updatedAt: timestamp("updated_at", { withTimezone: true, mode: "string" })
       .default(sql`CURRENT_TIMESTAMP`)
       .notNull(),
