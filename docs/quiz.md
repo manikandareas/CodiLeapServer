@@ -65,6 +65,18 @@ Request Body :
     {
       "questionId": "integer",
       "selectedAnswerId": "integer"
+    },
+    {
+      "questionId": "integer",
+      "selectedAnswerId": "integer"
+    },
+    {
+      "questionId": "integer",
+      "selectedAnswerId": "integer"
+    },
+    {
+      "questionId": "integer",
+      "selectedAnswerId": "integer"
     }
   ],
   "timeSpent": "integer"
