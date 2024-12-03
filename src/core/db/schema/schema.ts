@@ -20,12 +20,12 @@ export const completionStatus = pgEnum("completion_status", [
 ]);
 
 export const completionStatusEnum = completionStatus.enumValues;
-export const learningPathLevel = pgEnum("learning_path_level", [
+export const courseLevel = pgEnum("course_level", [
   "beginner",
   "intermediate",
   "advanced",
 ]);
-export const learningPathLevelEnum = learningPathLevel.enumValues;
+export const learningPathLevelEnum = courseLevel.enumValues;
 export const quizAttemptStatus = pgEnum("quiz_attempt_status", [
   "started",
   "completed",
@@ -69,6 +69,19 @@ export const userLearningPathProgress = pgTable(
   }
 );
 
+// id = 1,
+// name = "Getting Started with Mobile Development",
+// learningPathId = 1,
+// totalModules = 3,
+// description = "Foundational mobile development concepts",
+// createdAt = "2024-01-01",
+// updatedAt = "2024-01-02",
+// orderIndex = 1,
+// level = CourseLevel.BEGINNER,
+// estimatedDuration = 50,
+// rating = 4.84f,
+// totalEnrollments = 67917,
+
 export const courses = pgTable(
   "courses",
   {
@@ -84,6 +97,10 @@ export const courses = pgTable(
       .default(sql`CURRENT_TIMESTAMP`)
       .notNull(),
     orderIndex: integer("order_index").notNull(),
+    level: courseLevel("level").notNull(),
+    estimatedDuration: integer("estimated_duration"),
+    rating: numeric("rating", { precision: 3, scale: 2 }),
+    totalEnrollments: integer("total_enrollments").default(0),
   },
   (table) => {
     return {
@@ -217,7 +234,6 @@ export const userCourseProgress = pgTable(
 export const learningPaths = pgTable("learning_paths", {
   id: serial().primaryKey().notNull(),
   name: text().notNull(),
-  level: learningPathLevel().notNull(),
   description: text().notNull(),
   createdAt: timestamp("created_at", { withTimezone: true, mode: "string" })
     .default(sql`CURRENT_TIMESTAMP`)
@@ -225,7 +241,6 @@ export const learningPaths = pgTable("learning_paths", {
   updatedAt: timestamp("updated_at", { withTimezone: true, mode: "string" })
     .default(sql`CURRENT_TIMESTAMP`)
     .notNull(),
-  estimatedDuration: integer("estimated_duration"),
 });
 
 export const quizzes = pgTable(

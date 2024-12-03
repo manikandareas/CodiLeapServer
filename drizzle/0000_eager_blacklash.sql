@@ -1,6 +1,6 @@
--- CREATE TYPE "public"."completion_status" AS ENUM('not_started', 'in_progress', 'completed');--> statement-breakpoint
--- CREATE TYPE "public"."learning_path_level" AS ENUM('beginner', 'intermediate', 'advanced');--> statement-breakpoint
--- CREATE TYPE "public"."quiz_attempt_status" AS ENUM('started', 'completed', 'failed');--> statement-breakpoint
+CREATE TYPE "public"."completion_status" AS ENUM('not_started', 'in_progress', 'completed');--> statement-breakpoint
+CREATE TYPE "public"."course_level" AS ENUM('beginner', 'intermediate', 'advanced');--> statement-breakpoint
+CREATE TYPE "public"."quiz_attempt_status" AS ENUM('started', 'completed', 'failed');--> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "answer_options" (
 	"id" serial PRIMARY KEY NOT NULL,
 	"question_id" integer NOT NULL,
@@ -26,17 +26,19 @@ CREATE TABLE IF NOT EXISTS "courses" (
 	"description" text,
 	"created_at" timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
 	"updated_at" timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
-	"order_index" integer NOT NULL
+	"order_index" integer NOT NULL,
+	"level" "course_level" NOT NULL,
+	"estimated_duration" integer,
+	"rating" numeric(3, 2),
+	"total_enrollments" integer DEFAULT 0
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "learning_paths" (
 	"id" serial PRIMARY KEY NOT NULL,
 	"name" text NOT NULL,
-	"level" "learning_path_level" NOT NULL,
 	"description" text NOT NULL,
 	"created_at" timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
-	"updated_at" timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
-	"estimated_duration" integer
+	"updated_at" timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "modules" (

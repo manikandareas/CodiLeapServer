@@ -1,5 +1,5 @@
 {
-  "id": "eeeb1abb-4103-4bf0-b94f-7f862c63caa6",
+  "id": "cfe07b56-6029-49ec-8160-e61ed8eff6df",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -180,6 +180,32 @@
           "type": "integer",
           "primaryKey": false,
           "notNull": true
+        },
+        "level": {
+          "name": "level",
+          "type": "course_level",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "estimated_duration": {
+          "name": "estimated_duration",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "rating": {
+          "name": "rating",
+          "type": "numeric(3, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "total_enrollments": {
+          "name": "total_enrollments",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "default": 0
         }
       },
       "indexes": {},
@@ -220,13 +246,6 @@
           "primaryKey": false,
           "notNull": true
         },
-        "level": {
-          "name": "level",
-          "type": "learning_path_level",
-          "typeSchema": "public",
-          "primaryKey": false,
-          "notNull": true
-        },
         "description": {
           "name": "description",
           "type": "text",
@@ -246,12 +265,6 @@
           "primaryKey": false,
           "notNull": true,
           "default": "CURRENT_TIMESTAMP"
-        },
-        "estimated_duration": {
-          "name": "estimated_duration",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false
         }
       },
       "indexes": {},
@@ -1466,8 +1479,8 @@
         "completed"
       ]
     },
-    "public.learning_path_level": {
-      "name": "learning_path_level",
+    "public.course_level": {
+      "name": "course_level",
       "schema": "public",
       "values": [
         "beginner",
