@@ -19,15 +19,12 @@
 //     },
 
 import { z } from "zod";
-import { learningPathLevelEnum } from "../db/schema";
 import { CoursesResponse } from "./courses_model";
 
 export const LearningPathResponse = z.object({
   id: z.number(),
   name: z.string(),
-  level: z.enum(learningPathLevelEnum),
   description: z.string(),
-  estimatedDuration: z.number().nullable(),
   createdAt: z.string(),
   updatedAt: z.string(),
   courses: z.array(CoursesResponse),

@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { courseLevelEnum } from "../db/schema";
 
 export const CoursesResponse = z.object({
   id: z.number(),
@@ -9,6 +10,10 @@ export const CoursesResponse = z.object({
   createdAt: z.string(),
   updatedAt: z.string(),
   orderIndex: z.number(),
+  level: z.enum(courseLevelEnum),
+  estimatedDuration: z.number().nullable(),
+  rating: z.string().nullable(),
+  totalEnrollments: z.number().nullable(),
 });
 
 export type CoursesResponseType = z.infer<typeof CoursesResponse>;

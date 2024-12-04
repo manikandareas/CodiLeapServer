@@ -25,7 +25,7 @@ export const courseLevel = pgEnum("course_level", [
   "intermediate",
   "advanced",
 ]);
-export const learningPathLevelEnum = courseLevel.enumValues;
+export const courseLevelEnum = courseLevel.enumValues;
 export const quizAttemptStatus = pgEnum("quiz_attempt_status", [
   "started",
   "completed",
