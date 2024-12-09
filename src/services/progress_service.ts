@@ -1,5 +1,7 @@
 import db from "@/core/db";
+import { completionStatus } from "@/core/db/schema";
 import { sql } from "drizzle-orm";
+import { HTTPException } from "hono/http-exception";
 
 // Complete Module
 
@@ -230,4 +232,44 @@ export const getQuizStreakDetails = async (userId: number) => {
     latestAttempt: row.latest_attempt,
     streakValue: Number(row.validated_streak),
   }));
+};
+
+export const getCurrentProgress = async (userId: number) => {
+  const currentLearningPathProgress =
+    await db.query.userLearningPathProgress.findFirst({
+      where: (userLearningPathProgress, { eq, and }) =>
+        and(
+          eq(userLearningPathProgress.userId, userId),
+          eq(userLearningPathProgress.completionStatus, "in_progress")
+        ),
+      orderBy: (userLearningPathProgress, { desc }) =>
+        desc(userLearningPathProgress.startedAt),
+    });
+
+  if (!currentLearningPathProgress) {
+    throw new HTTPException(404, {
+      message: "No learning path in progress",
+    });
+  }
+  const currentCourseProgress = await db.query.userCourseProgress.findFirst({
+    where: (userCourseProgress, { eq }) =>
+      eq(
+        userCourseProgress.courseId,
+        currentLearningPathProgress.currentCourseId || 0
+      ),
+    orderBy: (userCourseProgress, { desc }) =>
+      desc(userCourseProgress.startedAt),
+  });
+
+  if (!currentCourseProgress) {
+    throw new HTTPException(404, {
+      message: "No course in progress",
+    });
+  }
+
+  return {
+    learningPathId: currentLearningPathProgress.learningPathId,
+    courseId: currentCourseProgress.courseId,
+    moduleId: currentCourseProgress.currentModuleId,
+  };
 };

@@ -16,7 +16,7 @@ export const signToken = (
   options: TokenOptions = {}
 ): string => {
   const defaultOptions = {
-    expiresIn: "1h",
+    expiresIn: "7d",
   };
 
   const mergedOptions = { ...defaultOptions, ...options };

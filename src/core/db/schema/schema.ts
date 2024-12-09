@@ -19,6 +19,8 @@ export const completionStatus = pgEnum("completion_status", [
   "completed",
 ]);
 
+export const SCREENING_QUIZ_ID = 13 as const;
+
 export const completionStatusEnum = completionStatus.enumValues;
 export const courseLevel = pgEnum("course_level", [
   "beginner",
@@ -175,7 +177,7 @@ export const users = pgTable(
     phoneNumber: text("phone_number"),
     address: text(),
     dateOfBirth: date("date_of_birth"),
-    studyHours: integer("study_hours").default(0),
+    studyHours: text("study_hours").default("00:00"),
     createdAt: timestamp("created_at", { withTimezone: true, mode: "string" })
       .default(sql`CURRENT_TIMESTAMP`)
       .notNull(),

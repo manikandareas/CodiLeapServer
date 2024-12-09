@@ -1,5 +1,6 @@
 import { authMiddleware, Env } from "@/middlewares/auth_middleware";
 import {
+  getCurrentProgress,
   getLearningProgress,
   getQuizStreakDetails,
 } from "@/services/progress_service";
@@ -31,6 +32,16 @@ progressRoute.get("/streak-details", authMiddleware, async (c) => {
     },
     200
   );
+});
+
+progressRoute.get("/current", authMiddleware, async (c) => {
+  const user = c.var.token;
+  const response = await getCurrentProgress(user.id);
+  return c.json({
+    status: "OK",
+    message: "User current progress",
+    data: response,
+  });
 });
 
 export default progressRoute;
