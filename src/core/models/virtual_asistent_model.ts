@@ -2,19 +2,19 @@
 //     currentModule?: string;
 //     currentLesson?: string;
 //   }
-  
+
 //   export interface ChatRequest {
 //     userId: number;
 //     message: string;
 //     context: ChatContext;
 //   }
-  
+
 //   export interface RelatedResource {
 //     type: 'LESSON' | 'MODULE' | 'EXTERNAL';
 //     title: string;
 //     link: string;
 //   }
-  
+
 //   export interface VirtualAssistantChatResponse {
 //     message: string;
 //     status: string;
@@ -24,7 +24,7 @@
 //       relatedResources: RelatedResource[];
 //     };
 //   }
-  
+
 //   export interface VirtualAssistantChatData {
 //     id?: number;
 //     userId: number;
@@ -33,28 +33,25 @@
 //     timestamp?: string;
 //   }
 
-
 import { z } from "zod";
 
 // Request Model
 export const VirtualAssistantRequest = z.object({
-  userId: z.number(),
   context: z.string(),
   question: z.string(),
 });
 
-export type VirtualAssistantRequestType = z.infer<typeof VirtualAssistantRequest>;
+export type VirtualAssistantRequestType = z.infer<
+  typeof VirtualAssistantRequest
+>;
 
 // Response Model
 export const VirtualAssistantResponse = z.object({
-  success: z.boolean(),
   answer: z.string(),
   score: z.number(),
   message: z.string(),
 });
 
-export type VirtualAssistantResponseType = z.infer<typeof VirtualAssistantResponse>;
-
-
-
-
+export type VirtualAssistantResponseType = z.infer<
+  typeof VirtualAssistantResponse
+>;

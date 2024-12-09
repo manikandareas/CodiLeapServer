@@ -109,7 +109,10 @@
 
 import db from "@/core/db";
 import { virtualAssistantChats } from "@/core/db/schema";
-import { VirtualAssistantRequestType, VirtualAssistantResponseType } from "@/core/models/virtual_asistent_model";
+import {
+  VirtualAssistantRequestType,
+  VirtualAssistantResponseType,
+} from "@/core/models/virtual_asistent_model";
 import { HTTPException } from "hono/http-exception";
 import { StatusCodes } from "http-status-codes";
 import fetch from "node-fetch";
@@ -120,16 +123,19 @@ export const askVirtualAssistant = async (
 ): Promise<VirtualAssistantResponseType> => {
   return db.transaction(async (tx) => {
     // Interaksi dengan Flask API
-    const flaskResponse = await fetch("https://my-codileap-app-408671456899.asia-southeast2.run.app/answer", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        context: request.context,
-        question: request.question,
-      }),
-    });
+    const flaskResponse = await fetch(
+      "https://my-codileap-app-408671456899.asia-southeast2.run.app/answer",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          context: request.context,
+          question: request.question,
+        }),
+      }
+    );
 
     if (!flaskResponse.ok) {
       tx.rollback();
@@ -168,7 +174,6 @@ export const askVirtualAssistant = async (
 
     // Bangun respons untuk client
     return {
-      success: true,
       answer: responseData.answer,
       score: responseData.score,
       message: "Chat successfully processed and saved",
