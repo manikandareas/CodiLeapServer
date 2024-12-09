@@ -9,6 +9,7 @@ import learningPathRoute from "./learning_path_route";
 import courseRoute from "./course_route";
 import badgesRoute from "./badge_route";
 import analyticsRoute from "./analytics_route";
+import virtualAssistantRoute from "./virtual_asisten_route";
 
 export const routes = (app: Hono) => {
   app.use("*", logger());
@@ -32,4 +33,5 @@ export const routes = (app: Hono) => {
   app.route("/courses", courseRoute);
   app.route("/badges", badgesRoute);
   app.route("/analytics", analyticsRoute);
+  app.route("/virtual", virtualAssistantRoute);
 };
