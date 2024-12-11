@@ -5,7 +5,10 @@ import db from "@/core/db/index";
 import { users } from "@/core/db/schema/index";
 import { UpdateUserRequestType } from "@/core/models/users_model";
 
-export const updateUser = async (id: number, updates: UpdateUserRequestType) => {
+export const updateUser = async (
+  id: number,
+  updates: UpdateUserRequestType
+) => {
   // Check if the user exists
   const existingUser = await db.query.users.findFirst({
     where: (user) => eq(user.id, id),
@@ -22,7 +25,7 @@ export const updateUser = async (id: number, updates: UpdateUserRequestType) => 
     .update(users)
     .set({
       ...updates,
-      updatedAt: new Date().toISOString(), 
+      updatedAt: new Date().toISOString(),
     })
     .where(eq(users.id, id))
     .returning();
