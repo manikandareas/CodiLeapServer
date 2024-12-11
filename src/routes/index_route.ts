@@ -9,7 +9,11 @@ import learningPathRoute from "./learning_path_route";
 import courseRoute from "./course_route";
 import badgesRoute from "./badge_route";
 import analyticsRoute from "./analytics_route";
+<<<<<<< HEAD
 import userRoute from "./user_route";
+=======
+import virtualAssistantRoute from "./virtual_asisten_route";
+>>>>>>> 9eed33f91e947698cc2d9ad91d20cb7f7d8eca91
 
 export const routes = (app: Hono) => {
   app.use("*", logger());
@@ -33,5 +37,9 @@ export const routes = (app: Hono) => {
   app.route("/courses", courseRoute);
   app.route("/badges", badgesRoute);
   app.route("/analytics", analyticsRoute);
+<<<<<<< HEAD
   app.route("user",userRoute);
+=======
+  app.route("/virtual", virtualAssistantRoute);
+>>>>>>> 9eed33f91e947698cc2d9ad91d20cb7f7d8eca91
 };

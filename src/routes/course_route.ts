@@ -1,6 +1,7 @@
 import { authMiddleware, Env } from "@/middlewares/auth_middleware";
 import {
   completeModule,
+  findUnitsByModuleId,
   getCoursesByLearningPathID,
   getModulesByCourseId,
 } from "@/services/course_service";
@@ -42,7 +43,25 @@ courseRoute.put("/:courseId/modules/complete", authMiddleware, async (c) => {
   return c.json({
     status: "OK",
     message: "Module completed successfully",
+    data: response,
   });
 });
+
+courseRoute.get(
+  "/:courseId/modules/:moduleId/units",
+  authMiddleware,
+  async (c) => {
+    const courseId = c.req.param("courseId");
+    const moduleId = c.req.param("moduleId");
+
+    const units = await findUnitsByModuleId(+courseId, +moduleId);
+
+    return c.json({
+      message: "Units fetched successfully",
+      status: StatusCodes.OK,
+      data: units,
+    });
+  }
+);
 
 export default courseRoute;

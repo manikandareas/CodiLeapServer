@@ -51,7 +51,14 @@ export const getModulesByCourseId = async (
   const modules = await db.query.modules.findMany({
     where: (module, { eq }) => eq(module.courseId, courseId),
     with: {
-      units: true,
+      units: {
+        orderBy(fields, operators) {
+          return operators.asc(fields.orderIndex);
+        },
+      },
+    },
+    orderBy(fields, operators) {
+      return operators.asc(fields.orderIndex);
     },
   });
 
@@ -60,6 +67,13 @@ export const getModulesByCourseId = async (
 
 export const completeModule = async (userId: number, courseId: number) => {
   return await db.transaction(async (tx) => {
+    const progressStatus = {
+      isCourseCompleted: false,
+      isLearningPathCompleted: false,
+      nextModule: null as Omit<ModulesResponseType, "units"> | null,
+      nextCourse: null as CoursesResponseType | null,
+    };
+
     // Get current course progress
     const currentCourseProgress = await tx.query.userCourseProgress.findFirst({
       where: (ucp, { eq, and }) =>
@@ -93,12 +107,14 @@ export const completeModule = async (userId: number, courseId: number) => {
 
     if (nextModule) {
       // Update current module to next module
+      progressStatus.nextModule = nextModule;
       await tx
         .update(userCourseProgress)
         .set({ currentModuleId: nextModule.id })
         .where(eq(userCourseProgress.id, currentCourseProgress.id));
     } else {
       // No more modules, mark course as completed
+      progressStatus.isCourseCompleted = true;
       await tx
         .update(userCourseProgress)
         .set({
@@ -140,10 +156,19 @@ export const completeModule = async (userId: number, courseId: number) => {
 
         if (nextCourse) {
           // Find first module of the next course
+          progressStatus.nextCourse = nextCourse;
           const firstModuleOfNextCourse = await tx.query.modules.findFirst({
             where: (modules, { eq }) => eq(modules.courseId, nextCourse.id),
             orderBy: (modules, { asc }) => asc(modules.orderIndex),
           });
+
+          if (!firstModuleOfNextCourse) {
+            throw new HTTPException(StatusCodes.NOT_FOUND, {
+              message: "No modules found in the next course",
+            });
+          }
+
+          progressStatus.nextModule = firstModuleOfNextCourse;
 
           // Update learning path progress and create new course progress
           await tx
@@ -157,11 +182,12 @@ export const completeModule = async (userId: number, courseId: number) => {
             userId: userId,
             courseId: nextCourse.id,
             currentModuleId: firstModuleOfNextCourse?.id || null,
-            completionStatus: "not_started",
+            completionStatus: "in_progress",
             startedAt: new Date().toISOString(),
           });
         } else {
           // Last course completed, mark learning path as completed
+          progressStatus.isLearningPathCompleted = true;
           await tx
             .update(userLearningPathProgress)
             .set({
@@ -175,5 +201,19 @@ export const completeModule = async (userId: number, courseId: number) => {
         }
       }
     }
+    return progressStatus;
   });
+};
+
+export const findUnitsByModuleId = async (
+  courseId: number,
+  moduleId: number
+) => {
+  const units = await db.query.units.findMany({
+    where: (unit, { eq }) => eq(unit.moduleId, moduleId),
+    orderBy(fields, operators) {
+      return operators.asc(fields.orderIndex);
+    },
+  });
+  return units;
 };

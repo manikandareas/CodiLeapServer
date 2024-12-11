@@ -50,8 +50,23 @@ export type LoginResponseType = {
     email: string;
     avatarUrl: string;
     isAlreadyScreened: boolean;
+    fullName?: string | null;
+    phoneNumber?: string | null;
+    address?: string | null;
+    dob?: string | null;
+    studyHours?: number | null;
   };
 };
+
+// val id: Int,
+// val email: String,
+// val avatarUrl: String,
+// val isAlreadyScreened: Boolean,
+// val fullName: String? = null,
+// val phoneNumber: String? = null,
+// val address: String? = null,
+// val dob: String? = null,
+// val studyHours: Int? = null,
 
 export type JwtPayload = {
   id: number;

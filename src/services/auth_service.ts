@@ -83,6 +83,11 @@ export const loginUser = async (
       email: user.email,
       avatarUrl: user.avatarUrl as string,
       isAlreadyScreened: user.isAlreadyScreened,
+      address: user.address,
+      dob: user.dateOfBirth,
+      fullName: user.fullName,
+      phoneNumber: user.phoneNumber,
+      studyHours: user.studyHours,
     },
   };
 };

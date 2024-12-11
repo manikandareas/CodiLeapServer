@@ -26,6 +26,9 @@ export const getDailyQuiz = async (userId: number): Promise<DailyQuizType> => {
       with: {
         questions: {
           with: { answerOptions: true },
+          orderBy(fields, operators) {
+            return operators.asc(fields.createdAt);
+          },
         },
       },
     });
@@ -131,7 +134,7 @@ export const submitQuiz = async (
       totalScore,
       startTime: quizAttempt.startTime as string,
       endTime,
-      status: quizAttempt.status!,
+      status: totalScore >= quiz.passingScore ? "completed" : "failed",
       createdAt: quizAttempt.createdAt,
     };
   });
