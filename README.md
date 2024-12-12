@@ -1,6 +1,6 @@
-# Codileap Server
+# 🚀 Codileap Server
 
-## Project Structure
+## 📁 Project Structure
 
 ```bash
 src/
@@ -49,31 +49,31 @@ src/
 
 ---
 
-## Dependencies
+## 🛠️ Dependencies
 
 This project leverages the following technologies:
 
-- **[Bun](https://bun.sh):** A fast all-in-one JavaScript runtime optimized for speed.
-- **Postgres:** A robust relational database system.
-- **Drizzle ORM:** A type-safe ORM for TypeScript with a focus on simplicity and power.
-- **Hono JS:** A minimalist web framework for building fast and scalable web applications.
+- **[Bun](https://bun.sh):** ⚡ A fast all-in-one JavaScript runtime optimized for speed.
+- **Postgres:** 🐘 A robust relational database system.
+- **Drizzle ORM:** 🌱 A type-safe ORM for TypeScript with a focus on simplicity and power.
+- **Hono JS:** 🕊️ A minimalist web framework for building fast and scalable web applications.
 
 ---
 
-## Setup Guide
+## 📝 Setup Guide
 
-### 1. Clone the repository:
+### Step 1: Clone the repository
 ```bash
 git clone https://github.com/your-username/your-project.git
 ```
 
-### 2. Install dependencies:
+### Step 2: Install dependencies
 ```bash
 cd your-project
 bun install
 ```
 
-### 3. Set up the database:
+### Step 3: Set up the database
 
 Generate database schema and apply migrations:
 ```bash
@@ -81,31 +81,31 @@ bun run db:generate
 bun run db:migrate
 ```
 
-### 4. Configure environment variables:
+### Step 4: Configure environment variables
 
 Create a `.env` file in the project root with the following:
 ```bash
 DATABASE_URL=postgres://username:password@localhost:5432/your_database
 ```
 
-### 5. Start the development server:
+### Step 5: Start the development server
 ```bash
 bun run dev
 ```
 
-### 6. Access the database using Drizzle Studio:
+### Step 6: Access the database using Drizzle Studio
 ```bash
 bun run db:studio
 ```
 
 ---
 
-## Key Features and Details
+## 🔑 Key Features and Details
 
-### **Database Models**
+### 📋 Database Models
 The database models are defined in `core/db` using **Drizzle ORM**.
 
-- **Zod Validation:** Models incorporate [Zod](https://zod.dev/) to validate schema consistency. This ensures that only valid data can be persisted into the database.
+- **Zod Validation:** 🛡️ Models incorporate [Zod](https://zod.dev/) to validate schema consistency. This ensures that only valid data can be persisted into the database.
 - **Schema Example:**
 
   ```typescript
@@ -122,16 +122,16 @@ The database models are defined in `core/db` using **Drizzle ORM**.
 
   This model is enforced across the application for type safety and validation.
 
-### **Routes**
+### 🌐 Routes
 The routes are implemented in the `src/routes` directory. Each route handles a specific module of the application (e.g., analytics, courses, badges).
 
-#### HTTP Methods Used:
-- `GET`: Retrieve resources.
-- `POST`: Create new resources.
-- `PUT`: Update existing resources.
-- `DELETE`: Remove resources.
+#### HTTP Methods Used
+- `GET`: 📥 Retrieve resources.
+- `POST`: ✏️ Create new resources.
+- `PUT`: 🔄 Update existing resources.
+- `DELETE`: ❌ Remove resources.
 
-#### Example Route:
+#### Example Route
 ```typescript
 import { Hono } from 'hono';
 const app = new Hono();
@@ -144,10 +144,10 @@ app.get('/analytics', async (ctx) => {
 export default app;
 ```
 
-### **Services**
+### 🔄 Services
 Services manage business logic and interact with the database. They act as a bridge between routes and models.
 
-#### Example Service:
+#### Example Service
 ```typescript
 import { db } from '../core/db';
 
@@ -158,8 +158,22 @@ export const analyticsService = {
 };
 ```
 
+---
 
-## Notes
+## 🖼️ Visual Representation of Key Technologies
+
+### 🌱 Drizzle ORM
+![Drizzle ORM Diagram](https://raw.githubusercontent.com/drizzle-team/assets/main/drizzle-diagram.png)
+
+### 🐘 Postgres SQL
+![Postgres SQL Diagram](https://upload.wikimedia.org/wikipedia/commons/thumb/2/29/Postgresql_elephant.svg/128px-Postgresql_elephant.svg.png)
+
+### 🕊️ Hono JS
+![Hono JS Logo](https://hono.dev/images/hono.png)
+
+---
+
+## 📌 Notes
 - This project uses Bun v1.1.34 and was initialized with `bun init`.
 - Make sure your PostgreSQL server is running before starting the application.
 
