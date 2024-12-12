@@ -163,7 +163,7 @@ export const analyticsService = {
 ## Visual Representation of Key Technologies
 
 ### Drizzle ORM:
-![Drizzle ORM Diagram](https://raw.githubusercontent.com/drizzle-team/assets/main/drizzle-diagram.png)
+![Drizzle ORM Diagram](https://www.google.com/imgres?q=drizzle%20orm&imgurl=https%3A%2F%2Fmedia.licdn.com%2Fdms%2Fimage%2FD5612AQHHUzkz9Ie1Zg%2Farticle-cover_image-shrink_600_2000%2F0%2F1695866608071%3Fe%3D2147483647%26v%3Dbeta%26t%3DIbjOuWlX4dcEG33Kw-pwKBvmKqj2j7zMlfE4jo5GVRM&imgrefurl=https%3A%2F%2Fwww.linkedin.com%2Fpulse%2Fdrizzle-orm-new-star-rising-galaxy-bushra-khan&docid=aq1tMdY5gNZQcM&tbnid=Q74JSj5BuPbNQM&vet=12ahUKEwjfkp6gqKOKAxXv6zgGHQ3GE_YQM3oECBoQAA..i&w=297&h=170&hcb=2&ved=2ahUKEwjfkp6gqKOKAxXv6zgGHQ3GE_YQM3oECBoQAA)
 
 ### Postgres SQL:
 ![Postgres SQL Diagram](https://upload.wikimedia.org/wikipedia/commons/thumb/2/29/Postgresql_elephant.svg/256px-Postgresql_elephant.svg.png)
