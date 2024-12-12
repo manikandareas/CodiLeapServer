@@ -158,20 +158,6 @@ export const analyticsService = {
 };
 ```
 
----
-
-## Visual Representation of Key Technologies
-
-### Drizzle ORM:
-![Drizzle ORM Diagram](https://images.app.goo.gl/fcnAixxCUkrvuPL26)
-
-### Postgres SQL:
-![Postgres SQL Diagram](https://upload.wikimedia.org/wikipedia/commons/thumb/2/29/Postgresql_elephant.svg/256px-Postgresql_elephant.svg.png)
-
-### Hono JS:
-![Hono JS Logo](https://hono.dev/images/hono.png)
-
----
 
 ## Notes
 - This project uses Bun v1.1.34 and was initialized with `bun init`.
