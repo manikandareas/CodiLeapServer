@@ -1,6 +1,8 @@
-  # codileap_server 
-  # Structur Project
-  ``` bash
+# Codileap Server
+
+## Project Structure
+
+```bash
 src/
 ├── core/
 │   ├── db/
@@ -44,42 +46,136 @@ src/
 ├── package.json
 └── tsconfig.json
 ```
-Dependencies
-The project uses the following dependencies:
 
-bun - a fast JavaScript runtime
-Postgres - the database used for the application
+---
 
-Setup
+## Dependencies
 
-1. Clone the repository:
-   ``` bash
-   git clone https://github.com/your-username/your-project.git
-   ```
-2. Install dependencies:
-   ``` bash
-   cd your-project
-    bun install
-   ```
-3. Set up the database:
-   ``` bash
-   bun run db:generate
-   bun run db:migrate
-   ```
-4. Create a .env file in the project root and add the following environment variables :
-   ``` bash
-   DATABASE_URL=postgres://username:password@localhost:5432/your_database
-   ```
-5. Start the development server:
-   ``` bash
-   bun run dev
-   ```
-6. To access the Postgres database, you can use the following command:
-   ``` bash
-   bun run db:studio
-   ```
-   
+This project leverages the following technologies:
 
+- **[Bun](https://bun.sh):** A fast all-in-one JavaScript runtime optimized for speed.
+- **Postgres:** A robust relational database system.
+- **Drizzle ORM:** A type-safe ORM for TypeScript with a focus on simplicity and power.
+- **Hono JS:** A minimalist web framework for building fast and scalable web applications.
 
+---
 
-This project was created using `bun init` in bun v1.1.34. [Bun](https://bun.sh) is a fast all-in-one JavaScript runtime.
+## Setup Guide
+
+### 1. Clone the repository:
+```bash
+git clone https://github.com/your-username/your-project.git
+```
+
+### 2. Install dependencies:
+```bash
+cd your-project
+bun install
+```
+
+### 3. Set up the database:
+
+Generate database schema and apply migrations:
+```bash
+bun run db:generate
+bun run db:migrate
+```
+
+### 4. Configure environment variables:
+
+Create a `.env` file in the project root with the following:
+```bash
+DATABASE_URL=postgres://username:password@localhost:5432/your_database
+```
+
+### 5. Start the development server:
+```bash
+bun run dev
+```
+
+### 6. Access the database using Drizzle Studio:
+```bash
+bun run db:studio
+```
+
+---
+
+## Key Features and Details
+
+### **Database Models**
+The database models are defined in `core/db` using **Drizzle ORM**.
+
+- **Zod Validation:** Models incorporate [Zod](https://zod.dev/) to validate schema consistency. This ensures that only valid data can be persisted into the database.
+- **Schema Example:**
+
+  ```typescript
+  import { z } from 'zod';
+
+  const UserSchema = z.object({
+      id: z.string(),
+      email: z.string().email(),
+      password: z.string().min(8),
+      createdAt: z.date(),
+  });
+  export type User = z.infer<typeof UserSchema>;
+  ```
+
+  This model is enforced across the application for type safety and validation.
+
+### **Routes**
+The routes are implemented in the `src/routes` directory. Each route handles a specific module of the application (e.g., analytics, courses, badges).
+
+#### HTTP Methods Used:
+- `GET`: Retrieve resources.
+- `POST`: Create new resources.
+- `PUT`: Update existing resources.
+- `DELETE`: Remove resources.
+
+#### Example Route:
+```typescript
+import { Hono } from 'hono';
+const app = new Hono();
+
+app.get('/analytics', async (ctx) => {
+  const data = await analyticsService.getAll();
+  return ctx.json(data);
+});
+
+export default app;
+```
+
+### **Services**
+Services manage business logic and interact with the database. They act as a bridge between routes and models.
+
+#### Example Service:
+```typescript
+import { db } from '../core/db';
+
+export const analyticsService = {
+  async getAll() {
+    return db.analytics.findMany();
+  },
+};
+```
+
+---
+
+## Visual Representation of Key Technologies
+
+### Drizzle ORM:
+![Drizzle ORM Diagram](https://drizzle-team.s3.amazonaws.com/media/drizzle-orm-diagram.png)
+
+### Postgres SQL:
+![Postgres SQL Diagram](https://upload.wikimedia.org/wikipedia/commons/2/29/Postgresql_elephant.svg)
+
+### Hono JS:
+![Hono JS Logo](https://hono.dev/images/hono-light.svg)
+
+---
+
+## Notes
+- This project uses Bun v1.1.34 and was initialized with `bun init`.
+- Make sure your PostgreSQL server is running before starting the application.
+
+For questions or issues, feel free to raise an issue in the GitHub repository or contact the project maintainer.
+
