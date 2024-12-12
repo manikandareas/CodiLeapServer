@@ -163,13 +163,13 @@ export const analyticsService = {
 ## Visual Representation of Key Technologies
 
 ### Drizzle ORM:
-![Drizzle ORM Diagram](https://drizzle-team.s3.amazonaws.com/media/drizzle-orm-diagram.png)
+![Drizzle ORM Diagram](https://raw.githubusercontent.com/drizzle-team/assets/main/drizzle-diagram.png)
 
 ### Postgres SQL:
-![Postgres SQL Diagram](https://upload.wikimedia.org/wikipedia/commons/2/29/Postgresql_elephant.svg)
+![Postgres SQL Diagram](https://upload.wikimedia.org/wikipedia/commons/thumb/2/29/Postgresql_elephant.svg/256px-Postgresql_elephant.svg.png)
 
 ### Hono JS:
-![Hono JS Logo](https://hono.dev/images/hono-light.svg)
+![Hono JS Logo](https://hono.dev/images/hono.png)
 
 ---
 
