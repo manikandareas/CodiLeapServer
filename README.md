@@ -1,5 +1,6 @@
   # codileap_server 
   # Structur Project
+  ``` bash
 src/
 ├── core/
 │   ├── db/
@@ -42,7 +43,7 @@ src/
 ├── drizzle.config.ts
 ├── package.json
 └── tsconfig.json
-
+```
 Dependencies
 The project uses the following dependencies:
 
